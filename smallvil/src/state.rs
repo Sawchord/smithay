@@ -21,6 +21,7 @@ use smithay::{
         socket::ListeningSocketSource,
     },
 };
+use tracing::info;
 
 use crate::CalloopData;
 
@@ -157,6 +158,10 @@ pub struct ClientState {
 }
 
 impl ClientData for ClientState {
-    fn initialized(&self, _client_id: ClientId) {}
-    fn disconnected(&self, _client_id: ClientId, _reason: DisconnectReason) {}
+    fn initialized(&self, client_id: ClientId) {
+        info!("Initialized new client {:?}", client_id);
+    }
+    fn disconnected(&self, client_id: ClientId, reason: DisconnectReason) {
+        info!("Disconnected client {:?} because {:?}", client_id, reason);
+    }
 }

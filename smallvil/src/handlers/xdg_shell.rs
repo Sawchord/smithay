@@ -21,6 +21,7 @@ use smithay::{
         },
     },
 };
+use tracing::info;
 
 use crate::{
     grabs::{MoveSurfaceGrab, ResizeSurfaceGrab},
@@ -33,8 +34,9 @@ impl XdgShellHandler for Smallvil {
     }
 
     fn new_toplevel(&mut self, surface: ToplevelSurface) {
+        info!("New toplevel request: {:?}", surface);
         let window = Window::new_wayland_window(surface);
-        self.space.map_element(window, (0, 0), false);
+        self.space.map_element(window, (10, 10), true);
     }
 
     fn new_popup(&mut self, surface: PopupSurface, _positioner: PositionerState) {
@@ -53,6 +55,10 @@ impl XdgShellHandler for Smallvil {
     }
 
     fn move_request(&mut self, surface: ToplevelSurface, seat: wl_seat::WlSeat, serial: Serial) {
+        info!(
+            "Processing move request: surface: {:?}, seat: {:?}, serial:{:?}",
+            surface, seat, serial
+        );
         let seat = Seat::from_resource(&seat).unwrap();
 
         let wl_surface = surface.wl_surface();
@@ -85,6 +91,10 @@ impl XdgShellHandler for Smallvil {
         serial: Serial,
         edges: xdg_toplevel::ResizeEdge,
     ) {
+        info!(
+            "Processing resize request: surface: {:?}, seat: {:?}, serial:{:?}, edged: {:?}",
+            surface, seat, serial, edges
+        );
         let seat = Seat::from_resource(&seat).unwrap();
 
         let wl_surface = surface.wl_surface();

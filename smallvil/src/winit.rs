@@ -21,7 +21,8 @@ pub fn init_winit(
     let display_handle = &mut data.display_handle;
     let state = &mut data.state;
 
-    let (mut backend, winit) = winit::init()?;
+    let (mut backend, winit): (winit::WinitGraphicsBackend<GlesRenderer>, winit::WinitEventLoop) =
+        winit::init()?;
 
     let mode = Mode {
         size: backend.window_size(),
@@ -39,7 +40,12 @@ pub fn init_winit(
         },
     );
     let _global = output.create_global::<Smallvil>(display_handle);
-    output.change_current_state(Some(mode), Some(Transform::Flipped180), None, Some((0, 0).into()));
+    output.change_current_state(
+        Some(mode),
+        Some(Transform::Flipped180),
+        Some(smithay::output::Scale::Fractional(2.0)),
+        Some((0, 0).into()),
+    );
     output.set_preferred(mode);
 
     state.space.map_output(&output, (0, 0));

@@ -14,6 +14,7 @@ use smithay::{
         shm::{ShmHandler, ShmState},
     },
 };
+use tracing::info;
 
 use super::xdg_shell;
 
@@ -28,6 +29,9 @@ impl CompositorHandler for Smallvil {
 
     fn commit(&mut self, surface: &WlSurface) {
         on_commit_buffer_handler::<Self>(surface);
+
+        info!("Received commit on surface: {:?}", surface);
+
         if !is_sync_subsurface(surface) {
             let mut root = surface.clone();
             while let Some(parent) = get_parent(&root) {

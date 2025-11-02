@@ -5,13 +5,10 @@ edition = "2021"
 
 [dependencies]
 tracing-subscriber = { version = "0.3.16", features = ["env-filter"] }
+tracing = { version = "*" }
 bitflags = "2.2.1"
 
 [dependencies.smithay]
 path = "../"
 default-features = false
-features = [
-    "backend_winit",
-    "wayland_frontend",
-    "desktop",
-]
+features = ["backend_winit", "wayland_frontend", "desktop"]
